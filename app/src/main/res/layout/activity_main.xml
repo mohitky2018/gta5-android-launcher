@@ -319,14 +319,64 @@
                     android:textSize="13sp" />
             </LinearLayout>
 
+            <!-- Card 5: Credits & License -->
+            <LinearLayout
+                style="@style/GTA5Card"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical">
+
+                    <ImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:src="@drawable/icon_accept"
+                        android:contentDescription="Credits" />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="10dp"
+                        android:layout_weight="1"
+                        android:text="Credits &amp; License"
+                        android:textColor="@color/text_primary"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
+
+                    <Button
+                        android:id="@+id/btn_main_credits"
+                        style="@style/GTA5ButtonSecondary"
+                        android:layout_width="wrap_content"
+                        android:layout_height="36dp"
+                        android:text="View Credits"
+                        android:textSize="12sp"
+                        android:paddingLeft="12dp"
+                        android:paddingRight="12dp" />
+                </LinearLayout>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:text="Developed by Mohit Yadav • MIT License • Powered by wgpu-native &amp; WABT"
+                    android:textColor="@color/text_secondary"
+                    android:textSize="13sp" />
+            </LinearLayout>
+
             <!-- Footer -->
             <TextView
+                android:id="@+id/text_footer_credits"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
                 android:layout_marginBottom="24dp"
                 android:gravity="center"
-                android:text="GTA V Native Port Launcher v1.6.2 (Build 29)\nPowered by WebGPU / WebAssembly &amp; RAGE Shaders"
+                android:text="GTA V Native Port Launcher v1.6.2 (Build 29)\nDeveloped by Mohit Yadav • MIT License\nPowered by WebGPU / WebAssembly &amp; RAGE Shaders"
                 android:textColor="@color/text_muted"
                 android:textSize="11sp" />
 

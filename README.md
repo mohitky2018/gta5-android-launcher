@@ -3,9 +3,21 @@
 An Android launcher for the GTA V web port: it checks your game files, serves them locally, and starts the game either in a **native
 engine** inside the app (Vulkan, touch controls, sound, saves) or in Chrome.
 
-> **You need your own legally obtained copy of the game files.** This repository contains no game code, game data or engine binary.
-> The native engine library (`libgta5engine.so`) is built from your own game files with a separate, private toolchain and is never
-> committed here.
+> **Legal & Copyright Notice:** You need your own legally obtained copy of Grand Theft Auto V. This repository and its releases contain **NO copyrighted game code, NO proprietary game data, and NO game binaries**.
+> The native engine library (`libgta5engine.so`) must be built from your own game files using the native-engine toolchain and placed in `app/src/local/jniLibs/arm64-v8a/`. Without it, the launcher runs cleanly in Chrome mode.
+
+## Quick Start (Install on Android)
+
+1. **Download & Install the Launcher**:
+   - Download [`release/app-release.apk`](release/app-release.apk) (pre-built release, signed and ready to install on Android 8.0+ arm64).
+   - Install the APK on your Android phone.
+2. **Provide your GTA V game files**:
+   - Copy your legally obtained GTA V game assets to your phone's storage.
+   - Open the GTA5 Launcher app, grant storage permissions, and select your game directory.
+3. **Play**:
+   - Tap **Play**. The launcher verifies your files and runs the game in Chrome with full touch overlay, or in native Vulkan mode if you built `libgta5engine.so`.
+
+---
 
 ## Features
 
@@ -16,7 +28,7 @@ engine** inside the app (Vulkan, touch controls, sound, saves) or in Chrome.
     renderer) in its own process. No browser, smooth frame pacing, Android audio (AAudio), real save files.
   - **Chrome** – a built-in HTTP server (`127.0.0.1`) serves the web build with the cross-origin isolation headers it needs, and the
     game opens in a Chrome Custom Tab with an injected touch overlay (`assets/touch/touch.js`).
-  - **Automatic** – native when the engine library is present, otherwise Chrome.
+  - **Automatic** – native when your custom engine library is present, otherwise Chrome.
 - **Context touch controls** (native mode, `controls/NativeControlsView.java`): the buttons change with what the player is doing –
   on foot, car, motorbike, bicycle, boat, submarine, helicopter, plane, the phone (phone dock) and the pause menu (menu navigation).
   The engine reports the situation (`NativeEngine.controlState()`); keys follow the PC defaults (horn G, lean Shift/Ctrl, flight
@@ -47,22 +59,22 @@ MainActivity ──► GameActivity ──► Native engine?  yes ─► NativeG
   overlay injection.
 - `settings/` – `GameSettings` (presets and options, launch arguments) and the full-screen settings UI.
 
-## Building
+## Building from Source
 
 Requirements: JDK 17, Android SDK 34.
 
 ```sh
-./gradlew assembleDebug        # app/build/outputs/apk/debug/app-debug.apk
+./gradlew assembleRelease      # release/app-release.apk
 ```
 
-Without an engine library the app builds and works in Chrome mode. For native mode, build `libgta5engine.so` with the native engine
+Without an engine library the app builds and works in Chrome mode. For native mode, build `libgta5engine.so` from your own game files with the native engine
 toolchain; it is linked into `app/src/local/jniLibs/arm64-v8a/`.
 
 ### Local files (`app/src/local/`, not in git)
 
 Both build types add `app/src/local/{res,assets,jniLibs}` on top of `main`, so files there replace those of the same name:
 
-- `jniLibs/arm64-v8a/libgta5engine.so` – your engine build;
+- `jniLibs/arm64-v8a/libgta5engine.so` – your private engine build;
 - `res/drawable/icon_*.png`, `assets/touch/buttons/icon_*.png`, `assets/touch/icons/*.png` – your own button artwork (the repository
   ships simple text placeholders with the same names);
 - `assets/fonts/ChaletLondonNineteenSixty.ttf` – optional title font (the system font is used without it).
@@ -71,10 +83,22 @@ Both build types add `app/src/local/{res,assets,jniLibs}` on top of `main`, so f
 
 ## Requirements
 
-- Android 8.0+ (API 26), arm64. Native mode needs Vulkan; tested on a Poco F6 (Snapdragon 8s Gen 3, 12 GB): ~25–35 FPS.
+- Android 8.0+ (API 26), arm64. Native mode needs Vulkan; tested on Snapdragon 8s Gen 3 / similar: ~25–35+ FPS.
 - About 3–4 GB of free RAM for the game in native mode.
 
 ## Disclaimer
 
 Not affiliated with or endorsed by Rockstar Games or Take-Two Interactive. Grand Theft Auto and GTA V are trademarks of their owners.
-This project is a launcher; it does not include or distribute the game.
+This project is a launcher; it does not include or distribute copyrighted game data.
+
+## Credits & Acknowledgments
+
+- **Lead Developer**: Mohit Yadav ([@mohitky2018](https://github.com/mohitky2018)) - Android Launcher architecture, native Vulkan/wgpu integration, touch & gamepad controls, audio engine, packaging.
+- **Native Graphics (WebGPU)**: [wgpu-native](https://github.com/gfx-rs/wgpu-native) by gfx-rs (MIT / Apache-2.0)
+- **WebAssembly Runtime Tools**: [WABT](https://github.com/WebAssembly/wabt) (wasm2c) by the WebAssembly Community Group (Apache-2.0)
+- **SIMD Support**: [SIMDe](https://github.com/simd-everywhere/simde) by Evan Nemerson & contributors (MIT)
+- **GTA V**: Grand Theft Auto and GTA V are registered trademarks of Rockstar Games and Take-Two Interactive.
+
+## License
+
+This project is licensed under the [MIT License](LICENSE) - see the [LICENSE](LICENSE) file for details.

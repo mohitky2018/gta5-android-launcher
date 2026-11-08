@@ -38,6 +38,7 @@ import io.github.playgta5.launcher.cheats.CheatsDialog;
 import io.github.playgta5.launcher.installer.GameInstaller;
 import io.github.playgta5.launcher.settings.GameSettings;
 import io.github.playgta5.launcher.settings.SettingsDialog;
+import io.github.playgta5.launcher.utils.CreditsDialog;
 import io.github.playgta5.launcher.utils.ErrorDialog;
 import io.github.playgta5.launcher.utils.GameDirectoryResolver;
 import io.github.playgta5.launcher.utils.PathUtils;
@@ -185,6 +186,17 @@ public class MainActivity extends AppCompatActivity {
         btnCheats.setOnClickListener(v -> {
             new CheatsDialog(MainActivity.this, null).show();
         });
+
+        // Credits Dialog Button & Footer
+        Button btnCredits = findViewById(R.id.btn_main_credits);
+        if (btnCredits != null) {
+            btnCredits.setOnClickListener(v -> CreditsDialog.show(MainActivity.this));
+        }
+
+        View footerCredits = findViewById(R.id.text_footer_credits);
+        if (footerCredits != null) {
+            footerCredits.setOnClickListener(v -> CreditsDialog.show(MainActivity.this));
+        }
 
         updateGraphicsSummary();
     }

@@ -65,6 +65,7 @@ public class SettingsDialog extends Dialog {
         buildGraphics();
         buildTouch();
         buildAdvanced();
+        buildCredits();
 
         TextView done = new TextView(getContext());
         done.setText("DONE");
@@ -253,6 +254,19 @@ public class SettingsDialog extends Dialog {
         String[] s = new String[GameSettings.PERCENTS.length];
         for (int i = 0; i < s.length; i++) s[i] = GameSettings.PERCENTS[i] + "%";
         return s;
+    }
+
+    private void buildCredits() {
+        header("CREDITS & LICENSE");
+        note("GTA V Android Launcher & Native ARM64 Engine\n"
+                + "Developed & Ported by Mohit Yadav (@mohitky2018)\n\n"
+                + "Third-Party Libraries:\n"
+                + "• wgpu-native (WebGPU Vulkan) - MIT / Apache-2.0\n"
+                + "• WABT (wasm2c) - Apache-2.0\n"
+                + "• SIMDe - MIT\n\n"
+                + "Licensed under the MIT License.\n"
+                + "Copyright (c) 2026 Mohit Yadav\n\n"
+                + "Grand Theft Auto and GTA V are trademarks of Rockstar Games and Take-Two Interactive. Not affiliated with or endorsed by Rockstar Games.");
     }
 
     private int dp(int v) {

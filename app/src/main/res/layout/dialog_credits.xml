@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/surface_dark"
+    android:orientation="vertical"
+    android:padding="20dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical">
+
+        <ImageView
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:src="@drawable/icon_accept"
+            android:contentDescription="Credits" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:layout_weight="1"
+            android:text="CREDITS &amp; LICENSE"
+            android:textColor="@color/gta_gold"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="12dp"
+        android:layout_marginBottom="12dp"
+        android:background="@color/surface_card_stroke" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="260dp"
+        android:background="@drawable/bg_card"
+        android:padding="14dp">
+
+        <TextView
+            android:id="@+id/text_credits_content"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/text_primary"
+            android:textSize="13sp"
+            android:lineSpacingExtra="3dp"
+            android:text="GTA V PORTABLE EDITION (ANDROID)\n\nDeveloped &amp; Ported by:\n• Mohit Yadav (@mohitky2018)\n  - Android Launcher &amp; Game Management\n  - Native ARM64 Engine Translation\n  - Vulkan Renderer (wgpu-native)\n  - Context Touch &amp; Gamepad Controls\n  - AAudio Low-Latency Audio Driver\n\nThird-Party Open Source Libraries:\n• wgpu-native (gfx-rs) — WebGPU Vulkan Backend (MIT / Apache-2.0)\n• WABT (WebAssembly Binary Toolkit) — wasm2c Translator (Apache-2.0)\n• SIMDe — SIMD Everywhere for ARM NEON (MIT)\n\nLicense:\nLicensed under the MIT License.\nCopyright (c) 2026 Mohit Yadav\n\nDisclaimer:\nThis project is an independent open-source launcher. Grand Theft Auto and GTA V are registered trademarks and copyrights of Rockstar Games and Take-Two Interactive. Not affiliated with or endorsed by Rockstar Games or Take-Two Interactive." />
+    </ScrollView>
+
+    <Button
+        android:id="@+id/btn_dismiss_credits"
+        style="@style/GTA5Button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="CLOSE" />
+
+</LinearLayout>

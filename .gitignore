@@ -3,13 +3,17 @@
 build/
 app/build/
 local.properties
-*.apk
 *.aab
+*.hprof
 .DS_Store
 .idea/
 *.iml
 captures/
 
-# not redistributable: your own engine build, game data and third-party artwork (see README "Local files")
+# APK build outputs ignored except committed releases in release/
+*.apk
+!release/*.apk
+
+# untracked local overrides
 app/src/local/
 app/src/main/jniLibs/arm64-v8a/libgta5engine.so

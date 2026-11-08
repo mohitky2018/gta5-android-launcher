@@ -20,6 +20,13 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.debug
+        }
+    }
+
+    packaging {
+        jniLibs {
+            useLegacyPackaging = true
         }
     }
 
@@ -35,7 +42,6 @@ android {
     // source sets override main, so anything there replaces the placeholder of the same name.
     sourceSets {
         debug { res.srcDirs += 'src/local/res'; assets.srcDirs += 'src/local/assets'; jniLibs.srcDirs += 'src/local/jniLibs' }
-        release { res.srcDirs += 'src/local/res'; assets.srcDirs += 'src/local/assets'; jniLibs.srcDirs += 'src/local/jniLibs' }
     }
 }
 
