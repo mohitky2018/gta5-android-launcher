@@ -38,6 +38,8 @@ public class NativeControlsView extends View {
     private static final class Btn {
         String icon, key; int kind; float x, y, size; boolean look;		// x: >0 from the left, <0 from the right (in view heights); y from the top
         float cx, cy, r; int pointer = -1; boolean latched; Runnable action;
+        int topIndex = -1, topCount = 0;		// in the top centre row
+        float pw, ph, hw, hh;				// a pedal: size in view heights; half size in pixels
     }
 
     private final GameSettings settings;
@@ -51,7 +53,13 @@ public class NativeControlsView extends View {
     private int context = -1, rawState = 0;
     private float alpha;
     private final float camSpeed, sizePref;
-    private final boolean invertY, fireAims, steerButtons, haptics;
+    private final boolean invertY, fireAims, steerButtons, haptics, cameraStick, showFps;
+
+    // right camera stick (Settings > Controls > Camera: Right stick): held deflection turns the camera every frame
+    private int camPointer = -1; private float camX, camY;
+    // FPS pill (Settings > Graphics > Show FPS counter): frames the engine presented per second
+    private long fpsFrames0 = -1, fpsT0 = 0; private int fps = -1;
+    private final Paint text = new Paint(Paint.ANTI_ALIAS_FLAG);
 
     // floating stick
     private int stickPointer = -1; private float stickOX, stickOY, stickX, stickY; private final String[] stickKeys = new String[4];
@@ -63,6 +71,8 @@ public class NativeControlsView extends View {
     private final Choreographer.FrameCallback tick = new Choreographer.FrameCallback() {
         @Override public void doFrame(long t) {
             if (++frame % 6 == 0) poll();
+            if (camPointer >= 0 && (camX != 0 || camY != 0)) look(camX * 26f, camY * 18f);
+            if (showFps && frame % 30 == 0) updateFps(t);
             Choreographer.getInstance().postFrameCallback(this);
         }
     };
@@ -77,6 +87,9 @@ public class NativeControlsView extends View {
         fireAims = settings.isFireAlsoAims();
         steerButtons = settings.isSteeringButtons();
         haptics = settings.isHapticsEnabled();
+        cameraStick = settings.getCameraMode() == 1;
+        showFps = settings.isFpsCounter();
+        text.setColor(0xFFFFFFFF); text.setTextAlign(Paint.Align.CENTER); text.setFakeBoldText(true);
         ring.setStyle(Paint.Style.STROKE);
         setContext(C_MENU);
     }
@@ -103,75 +116,71 @@ public class NativeControlsView extends View {
         releaseAll();
         context = c;
         buttons.clear();
-        // always: pause, settings
-        add("pause", "Escape", HOLD, 0.08f, 0.09f, 0.75f);
-        Btn s = add("settings", null, ACTION, -0.08f, 0.09f, 0.75f); s.action = () -> { if (listener != null) listener.onOpenSettings(); };
+        // The system buttons sit in a row at the top centre (top()), the left stick is always shown, the actions are on the right.
+        // x > 0: from the left edge, x < 0: from the right edge, both in view heights; y from the top in view heights.
         switch (c) {
             case C_FOOT:
-                add("switch_character", "AltLeft", HOLD, 0.21f, 0.09f, 0.75f);
-                add("phone", "ArrowUp", HOLD, -0.21f, 0.09f, 0.75f);
-                add("camera", "KeyV", HOLD, -0.34f, 0.09f, 0.75f);
-                add("special_ability", "CapsLock", HOLD, -0.47f, 0.09f, 0.75f);
-                add("fire", "", MOUSE_L, -0.17f, 0.72f, 1.35f).look = true;
-                add("aim", "", MOUSE_R, -0.17f, 0.42f, 1f).look = true;
-                add("jump", "Space", HOLD, -0.40f, 0.86f, 1f);
-                add("sprint", "ShiftLeft", settings.isSprintButton() ? LATCH : HOLD, -0.38f, 0.62f, 1f);
-                add("reload", "KeyR", HOLD, -0.38f, 0.38f, 0.9f);
-                add("enter_exit", "KeyF", HOLD, -0.58f, 0.48f, 1f);
-                add("cover", "KeyQ", HOLD, -0.60f, 0.72f, 0.9f);
-                add("crouch", "ControlLeft", HOLD, -0.62f, 0.93f, 0.75f);
-                add("weapons", "Tab", HOLD, -0.30f, 0.22f, 0.85f);
-                add("interact", "KeyE", HOLD, -0.47f, 0.22f, 0.75f);
-                add("weapon_next", "", WHEEL_UP, -0.60f, 0.22f, 0.7f);
-                add("detonate", "KeyB", HOLD, -0.73f, 0.22f, 0.7f);
+                top(new String[][]{{"camera", "KeyV"}, {"phone", "ArrowUp"}});
+                rightColumn();
+                add("special_ability", "CapsLock", HOLD, -0.416f, 0.228f, 0.95f);
+                add("jump", "Space", HOLD, -0.527f, 0.404f, 0.95f);
+                add("reload", "KeyR", HOLD, -0.734f, 0.475f, 0.9f);
+                add("sprint", "ShiftLeft", settings.isSprintButton() ? LATCH : HOLD, -0.938f, 0.568f, 0.9f);
+                add("cover", "KeyQ", HOLD, -0.90f, 0.78f, 0.95f);
+                add("aim", "", MOUSE_R, -0.649f, 0.72f, 1.1f).look = true;
+                add("fire", "", MOUSE_L, -0.37f, 0.665f, 1.5f).look = true;
+                add("crouch", "ControlLeft", HOLD, -0.42f, 0.905f, 0.75f);
+                add("interact", "KeyE", HOLD, -1.10f, 0.79f, 0.8f);
+                add("weapon_next", "", WHEEL_UP, -0.238f, 0.517f, 0.8f);
+                add("detonate", "KeyB", HOLD, -1.10f, 0.58f, 0.75f);
                 break;
             case C_CAR: case C_BOAT: case C_BIKE:
-                vehicleTop(c != C_BIKE);
-                add("gas", "KeyW", HOLD, -0.17f, 0.72f, 1.35f);
-                add("brake", "KeyS", HOLD, -0.40f, 0.86f, 1f);
-                add("handbrake", "Space", HOLD, -0.38f, 0.60f, 1f);
-                add("horn", "KeyG", HOLD, -0.17f, 0.42f, 0.9f);
-                add("enter_exit", "KeyF", HOLD, -0.58f, 0.46f, 1f);
-                add("look_back", "KeyC", HOLD, -0.38f, 0.38f, 0.8f);
-                add("fire", "", MOUSE_L, -0.60f, 0.70f, 0.9f).look = true;
-                add("aim", "", MOUSE_R, -0.62f, 0.92f, 0.75f).look = true;
-                add("radio", "KeyQ", HOLD, -0.30f, 0.22f, 0.8f);
-                if (c == C_CAR) { add("roof", "KeyE", HOLD, -0.47f, 0.22f, 0.75f); add("duck", "KeyX", HOLD, -0.60f, 0.22f, 0.75f); }
-                if (steerButtons) { add("steer_left", "KeyA", HOLD, 0.13f, 0.78f, 1.1f); add("steer_right", "KeyD", HOLD, 0.36f, 0.78f, 1.1f); }
+                top(c == C_BIKE ? new String[][]{{"radio", "KeyQ"}, {"camera", "KeyV"}, {"phone", "ArrowUp"}}
+                        : new String[][]{{"radio", "KeyQ"}, {"lights", "KeyH"}, {"camera", "KeyV"}, {"phone", "ArrowUp"}});
+                rightColumn();
+                add("horn", "KeyG", HOLD, 0.266f, 0.342f, 0.9f);
+                add("look_back", "KeyC", HOLD, 0.44f, 0.342f, 0.9f);
+                if (c == C_CAR) { add("duck", "KeyX", HOLD, -0.984f, 0.473f, 0.9f); add("roof", "KeyE", HOLD, -0.416f, 0.228f, 0.95f); }
+                add("fire", "", MOUSE_L, -0.799f, 0.473f, 0.9f).look = true;
+                add("aim", "", MOUSE_R, -0.799f, 0.674f, 0.9f).look = true;
+                add("handbrake", "Space", HOLD, -0.547f, 0.491f, 0.95f);
+                pedal("brake", "KeyS", -0.576f, 0.76f, 0.15f, 0.165f);
+                pedal("gas", "KeyW", -0.332f, 0.685f, 0.158f, 0.235f);
+                if (steerButtons) { add("steer_left", "KeyA", HOLD, 0.302f, 0.717f, 1.2f); add("steer_right", "KeyD", HOLD, 0.554f, 0.717f, 1.2f); }
                 break;
             case C_CYCLE:
-                vehicleTop(false);
-                add("gas", "KeyW", HOLD, -0.17f, 0.72f, 1.35f);
-                add("sprint", "CapsLock", HOLD, -0.38f, 0.60f, 1f);
-                add("brake", "KeyS", HOLD, -0.40f, 0.86f, 1f);
-                add("handbrake", "KeyE", HOLD, -0.17f, 0.42f, 0.9f);		// front brake
-                add("enter_exit", "KeyF", HOLD, -0.58f, 0.46f, 1f);
-                add("look_back", "KeyC", HOLD, -0.38f, 0.38f, 0.8f);
-                add("fire", "", MOUSE_L, -0.60f, 0.70f, 0.9f).look = true;
+                top(new String[][]{{"camera", "KeyV"}, {"phone", "ArrowUp"}});
+                rightColumn();
+                add("sprint", "CapsLock", HOLD, -0.547f, 0.491f, 0.95f);
+                add("handbrake", "KeyE", HOLD, -0.799f, 0.674f, 0.9f);		// front brake
+                add("look_back", "KeyC", HOLD, 0.266f, 0.342f, 0.9f);
+                add("fire", "", MOUSE_L, -0.799f, 0.473f, 0.9f).look = true;
+                pedal("brake", "KeyS", -0.576f, 0.76f, 0.15f, 0.165f);
+                pedal("gas", "KeyW", -0.332f, 0.685f, 0.158f, 0.235f);
                 break;
             case C_SUB:
-                vehicleTop(true);
-                add("gas", "KeyW", HOLD, -0.17f, 0.72f, 1.35f);
-                add("brake", "KeyS", HOLD, -0.40f, 0.86f, 1f);
-                add("dive", "ControlLeft", HOLD, -0.38f, 0.60f, 1f);
-                add("surface", "ShiftLeft", HOLD, -0.17f, 0.42f, 1f);
-                add("enter_exit", "KeyF", HOLD, -0.58f, 0.46f, 1f);
-                add("look_back", "KeyC", HOLD, -0.38f, 0.38f, 0.8f);
+                top(new String[][]{{"lights", "KeyH"}, {"camera", "KeyV"}, {"phone", "ArrowUp"}});
+                rightColumn();
+                add("dive", "ControlLeft", HOLD, -0.799f, 0.674f, 1f);
+                add("surface", "ShiftLeft", HOLD, -0.799f, 0.473f, 1f);
+                add("look_back", "KeyC", HOLD, 0.266f, 0.342f, 0.9f);
+                pedal("brake", "KeyS", -0.576f, 0.76f, 0.15f, 0.165f);
+                pedal("gas", "KeyW", -0.332f, 0.685f, 0.158f, 0.235f);
                 break;
             case C_HELI: case C_PLANE:
-                vehicleTop(false);
-                add("throttle_up", "KeyW", HOLD, -0.16f, 0.52f, 1.15f);
-                add("throttle_down", "KeyS", HOLD, -0.16f, 0.84f, 1.15f);
-                add("yaw_right", "KeyD", HOLD, -0.38f, 0.86f, 1f);
-                add("yaw_left", "KeyA", HOLD, -0.60f, 0.86f, 1f);
-                add("fire", "Space", HOLD, -0.38f, 0.60f, 1f);
-                add("enter_exit", "KeyF", HOLD, -0.58f, 0.46f, 1f);
-                add("look_back", "KeyC", HOLD, -0.38f, 0.36f, 0.8f);
-                add("vehicle_weapon", "Tab", HOLD, -0.30f, 0.22f, 0.8f);
-                if (c == C_PLANE) add("landing_gear", "KeyG", HOLD, -0.47f, 0.22f, 0.8f);
+                top(new String[][]{{"camera", "KeyV"}, {"phone", "ArrowUp"}});
+                rightColumn();
+                add("throttle_up", "KeyW", HOLD, -0.36f, 0.52f, 1.15f);
+                add("throttle_down", "KeyS", HOLD, -0.36f, 0.84f, 1.15f);
+                add("yaw_left", "KeyA", HOLD, -0.80f, 0.86f, 1f);
+                add("yaw_right", "KeyD", HOLD, -0.58f, 0.86f, 1f);
+                add("fire", "Space", HOLD, -0.62f, 0.60f, 1f);
+                add("look_back", "KeyC", HOLD, 0.266f, 0.342f, 0.9f);
+                add("vehicle_weapon", "Tab", HOLD, -0.416f, 0.228f, 0.95f);
+                if (c == C_PLANE) add("landing_gear", "KeyG", HOLD, 0.44f, 0.342f, 0.9f);
                 break;
             case C_PHONE:
-                add("phone", "Backspace", HOLD, -0.21f, 0.09f, 0.75f);		// put it away
+                top(new String[][]{{"phone", "Backspace"}});		// put it away
                 add("up", "ArrowUp", HOLD, -0.40f, 0.42f, 1f);
                 add("down", "ArrowDown", HOLD, -0.40f, 0.82f, 1f);
                 add("left", "ArrowLeft", HOLD, -0.60f, 0.62f, 1f);
@@ -182,25 +191,43 @@ public class NativeControlsView extends View {
                 add("prompt_option", "Space", HOLD, -0.72f, 0.40f, 0.8f);
                 break;
             case C_MENU: default:
-                add("up", "ArrowUp", HOLD, 0.30f, 0.44f, 1f);
-                add("down", "ArrowDown", HOLD, 0.30f, 0.82f, 1f);
-                add("left", "ArrowLeft", HOLD, 0.11f, 0.63f, 1f);
-                add("right", "ArrowRight", HOLD, 0.49f, 0.63f, 1f);
-                add("accept", "Enter", HOLD, -0.16f, 0.78f, 1.15f);
-                add("back", "Backspace", HOLD, -0.38f, 0.86f, 1f);
-                add("tab_left", "KeyQ", HOLD, 0.21f, 0.09f, 0.75f);
-                add("tab_right", "KeyE", HOLD, -0.21f, 0.09f, 0.75f);
-                add("phone_option", "Space", HOLD, -0.16f, 0.48f, 0.85f);
+                top(new String[0][]);
+                add("tab_left", "KeyQ", HOLD, 0.248f, 0.113f, 0.95f);
+                add("tab_right", "KeyE", HOLD, -0.249f, 0.113f, 0.95f);
+                add("up", "ArrowUp", HOLD, 0.377f, 0.535f, 1f);
+                add("left", "ArrowLeft", HOLD, 0.248f, 0.664f, 1f);
+                add("right", "ArrowRight", HOLD, 0.507f, 0.664f, 1f);
+                add("down", "ArrowDown", HOLD, 0.377f, 0.795f, 1f);
+                add("accept", "Enter", HOLD, -0.332f, 0.664f, 1.4f);
+                add("back", "Backspace", HOLD, -0.595f, 0.797f, 1f);
+                add("phone_option", "Space", HOLD, -0.20f, 0.36f, 0.8f);
                 break;
         }
         layoutButtons();
         invalidate();
     }
 
-    private void vehicleTop(boolean lights) {
-        add("phone", "ArrowUp", HOLD, -0.21f, 0.09f, 0.75f);
-        add("camera", "KeyV", HOLD, -0.34f, 0.09f, 0.75f);
-        if (lights) add("lights", "KeyH", HOLD, -0.47f, 0.09f, 0.75f);
+    /** The top centre row: the context's buttons, then pause and settings. */
+    private void top(String[][] keys) {
+        List<Btn> row = new ArrayList<>();
+        for (String[] k : keys) row.add(add(k[0], k[1], HOLD, 0, 0.075f, 0.77f));
+        row.add(add("pause", "Escape", HOLD, 0, 0.075f, 0.77f));
+        Btn s = add("settings", null, ACTION, 0, 0.075f, 0.77f); s.action = () -> { if (listener != null) listener.onOpenSettings(); };
+        row.add(s);
+        for (int i = 0; i < row.size(); i++) { Btn b = row.get(i); b.topIndex = i; b.topCount = row.size(); }
+    }
+
+    /** The column at the right edge: weapon wheel, character switch, enter/exit. */
+    private void rightColumn() {
+        add("weapons", "Tab", HOLD, -0.238f, 0.161f, 0.95f);
+        add("switch_character", "AltLeft", HOLD, -0.238f, 0.279f, 0.95f);
+        add("enter_exit", "KeyF", HOLD, -0.238f, 0.398f, 0.95f);
+    }
+
+    /** A pedal: a rounded rectangle w x h (view heights) centred at x, y. */
+    private Btn pedal(String icon, String key, float x, float y, float w, float h) {
+        Btn b = add(icon, key, HOLD, x, y, 1f); b.pw = w; b.ph = h;
+        return b;
     }
 
     private Btn add(String icon, String key, int kind, float x, float y, float size) {
@@ -216,6 +243,8 @@ public class NativeControlsView extends View {
             b.cx = b.x >= 0 ? b.x * h : w + b.x * h;
             b.cy = b.y * h;
             b.r = 0.068f * h * sizePref * b.size;
+            if (b.topIndex >= 0) b.cx = w / 2f + (b.topIndex - (b.topCount - 1) / 2f) * 0.121f * h * Math.max(1f, sizePref);
+            if (b.pw > 0) { b.hw = b.pw * h * sizePref / 2f; b.hh = b.ph * h * sizePref / 2f; b.r = Math.min(b.hw, b.hh); }
         }
     }
 
@@ -240,7 +269,7 @@ public class NativeControlsView extends View {
         if (NativeEngine.isAvailable()) { NativeEngine.mouseButton(0, false); NativeEngine.mouseButton(1, false); }
         for (int i = 0; i < 4; i++) stickKeys[i] = null;
         for (Btn b : buttons) { b.pointer = -1; b.latched = false; }
-        stickPointer = -1; lookPointer = -1; buttonLook.clear();
+        stickPointer = -1; lookPointer = -1; buttonLook.clear(); camPointer = -1; camX = camY = 0;
     }
 
     private void buttonDown(Btn b) {
@@ -301,10 +330,26 @@ public class NativeControlsView extends View {
         Btn best = null; float bd = Float.MAX_VALUE;
         for (Btn b : buttons) {
             float dx = x - b.cx, dy = y - b.cy, d = dx * dx + dy * dy, rr = b.r * 1.25f;
+            if (b.pw > 0) { if (Math.abs(dx) < b.hw * 1.12f && Math.abs(dy) < b.hh * 1.12f) return b; continue; }
             if (d < rr * rr && d < bd) { best = b; bd = d; }
         }
         return best;
     }
+    // the sticks' resting places: the left stick under the left thumb, the camera stick right of centre
+    private float stickRestX() { return 0.51f * getHeight(); }
+    private float stickRestY() { return 0.70f * getHeight(); }
+    private float stickR() { return 0.13f * getHeight() * Math.max(0.8f, sizePref); }
+    private float camRestX() { return getWidth() - 0.625f * getHeight(); }
+    private float camRestY() { return 0.571f * getHeight(); }
+    private boolean camAllowed() { return cameraStick && context != C_MENU && context != C_PHONE; }
+
+    private void updateFps(long nanos) {
+        if (!NativeEngine.isAvailable()) return;
+        long f = NativeEngine.framesPresented();
+        if (fpsFrames0 >= 0 && nanos > fpsT0) { fps = Math.round((f - fpsFrames0) * 1e9f / (nanos - fpsT0)); invalidate(); }
+        fpsFrames0 = f; fpsT0 = nanos;
+    }
+
     private boolean stickAllowed() { return context != C_MENU && !(steerButtons && (context == C_CAR || context == C_BOAT)); }
 
     @Override public boolean onTouchEvent(MotionEvent e) {
@@ -317,19 +362,28 @@ public class NativeControlsView extends View {
                 b.pointer = id; buttonDown(b);
                 if (b.look) buttonLook.put(id, new float[] { x, y });
             } else if (b == null && x < getWidth() * 0.42f && stickPointer < 0 && stickAllowed()) {
-                stickPointer = id; stickOX = x; stickOY = y; stickX = stickY = 0;
+                stickPointer = id; stickX = stickY = 0;
+                boolean nearRest = Math.hypot(x - stickRestX(), y - stickRestY()) < stickR() * 1.5f;
+                stickOX = nearRest ? stickRestX() : x; stickOY = nearRest ? stickRestY() : y;		// from the shown stick, or where the thumb lands
+                if (nearRest) { float R = stickR(); stickX = clamp1((x - stickOX) / R); stickY = clamp1((y - stickOY) / R); updateStick(stickX, stickY); }
+            } else if (b == null && camPointer < 0 && camAllowed() && Math.hypot(x - camRestX(), y - camRestY()) < stickR() * 1.4f) {
+                camPointer = id; camX = clamp1((x - camRestX()) / stickR()); camY = clamp1((y - camRestY()) / stickR());
             } else if (b == null && lookPointer < 0) {
                 lookPointer = id; lookX = x; lookY = y;
             }
             invalidate();
         } else if (a == MotionEvent.ACTION_MOVE) {
-            float R = 0.16f * getHeight();
+            float R = stickR();
             for (int i = 0; i < e.getPointerCount(); i++) {
                 int id = e.getPointerId(i); float x = e.getX(i), y = e.getY(i);
                 if (id == stickPointer) {
                     float dx = (x - stickOX) / R, dy = (y - stickOY) / R, len = (float) Math.hypot(dx, dy);
                     if (len > 1) { stickOX += (x - stickOX) * (1 - 1 / len) ; stickOY += (y - stickOY) * (1 - 1 / len); dx /= len; dy /= len; }		// the base follows the finger
                     stickX = dx; stickY = dy; updateStick(dx, dy);
+                } else if (id == camPointer) {
+                    float dx = (x - camRestX()) / R, dy = (y - camRestY()) / R, len = (float) Math.hypot(dx, dy);
+                    if (len > 1) { dx /= len; dy /= len; }
+                    camX = Math.abs(dx) < 0.12f ? 0 : dx; camY = Math.abs(dy) < 0.12f ? 0 : dy;
                 } else if (id == lookPointer) {
                     look(x - lookX, y - lookY); lookX = x; lookY = y;
                 } else {
@@ -343,6 +397,7 @@ public class NativeControlsView extends View {
             int id = e.getPointerId(e.getActionIndex());
             if (id == stickPointer) endStick();
             if (id == lookPointer) lookPointer = -1;
+            if (id == camPointer) { camPointer = -1; camX = camY = 0; }
             buttonLook.remove(id);
             for (Btn b : buttons) if (b.pointer == id) { b.pointer = -1; buttonUp(b); }
             invalidate();
@@ -363,23 +418,45 @@ public class NativeControlsView extends View {
         return b;
     }
 
+    private static float clamp1(float v) { return Math.max(-1f, Math.min(1f, v)); }
+
+    // Translucent grey discs with white icons; pressed or latched ones turn brighter. Pedals are rounded rectangles.
     @Override protected void onDraw(Canvas c) {
         int a = (int) (255 * alpha);
+        if (stickAllowed()) drawStick(c, stickPointer >= 0 ? stickOX : stickRestX(), stickPointer >= 0 ? stickOY : stickRestY(), stickPointer >= 0 ? stickX : 0, stickPointer >= 0 ? stickY : 0, a);
+        if (camAllowed()) drawStick(c, camRestX(), camRestY(), camX, camY, a);
         for (Btn b : buttons) {
             boolean on = b.pointer >= 0 || b.latched;
-            fill.setColor(on ? 0x66FDB813 : 0x55000000); fill.setAlpha((int) ((on ? 0.55f : 0.40f) * a));
-            c.drawCircle(b.cx, b.cy, b.r, fill);
-            ring.setColor(on ? 0xFFFDB813 : 0xFFFFFFFF); ring.setAlpha((int) ((on ? 0.95f : 0.45f) * a)); ring.setStrokeWidth(Math.max(2f, b.r * 0.05f));
-            c.drawCircle(b.cx, b.cy, b.r, ring);
-            int s = (int) (b.r * 1.15f);
-            Bitmap bmp = icon(b.icon, Math.max(8, s));
+            fill.setColor(on ? 0xFFFFFFFF : 0xFFA9ABA6); fill.setAlpha((int) ((on ? 0.62f : 0.42f) * a));
+            ring.setColor(0xFFFFFFFF); ring.setAlpha((int) ((on ? 0.8f : 0.18f) * a)); ring.setStrokeWidth(Math.max(1.5f, b.r * 0.03f));
+            float s;
+            if (b.pw > 0) {
+                rect.set(b.cx - b.hw, b.cy - b.hh, b.cx + b.hw, b.cy + b.hh);
+                float rr = Math.min(b.hw, b.hh) * 0.35f;
+                c.drawRoundRect(rect, rr, rr, fill); c.drawRoundRect(rect, rr, rr, ring);
+                s = Math.min(b.hw, b.hh) * 1.15f;
+            } else {
+                c.drawCircle(b.cx, b.cy, b.r, fill); c.drawCircle(b.cx, b.cy, b.r, ring);
+                s = b.r * 1.1f;
+            }
+            Bitmap bmp = icon(b.icon, Math.max(8, (int) s));
             if (bmp != null) { bmpPaint.setAlpha(a); rect.set(b.cx - s / 2f, b.cy - s / 2f, b.cx + s / 2f, b.cy + s / 2f); c.drawBitmap(bmp, null, rect, bmpPaint); }
         }
-        if (stickPointer >= 0) {
-            float R = 0.16f * getHeight();
-            fill.setColor(0x33000000); fill.setAlpha((int) (0.35f * a)); c.drawCircle(stickOX, stickOY, R, fill);
-            ring.setColor(0xFFFFFFFF); ring.setAlpha((int) (0.5f * a)); ring.setStrokeWidth(3f); c.drawCircle(stickOX, stickOY, R, ring);
-            fill.setColor(0xFFFFFFFF); fill.setAlpha((int) (0.55f * a)); c.drawCircle(stickOX + stickX * R, stickOY + stickY * R, R * 0.42f, fill);
-        }
+        if (showFps && fps >= 0) drawFps(c);
+    }
+
+    private void drawStick(Canvas c, float ox, float oy, float dx, float dy, int a) {
+        float R = stickR();
+        fill.setColor(0xFFA9ABA6); fill.setAlpha((int) (0.22f * a)); c.drawCircle(ox, oy, R, fill);
+        ring.setColor(0xFFFFFFFF); ring.setAlpha((int) (0.45f * a)); ring.setStrokeWidth(Math.max(2f, R * 0.025f)); c.drawCircle(ox, oy, R, ring);
+        fill.setColor(0xFFE4E5E2); fill.setAlpha((int) (0.72f * a)); c.drawCircle(ox + dx * R * 0.6f, oy + dy * R * 0.6f, R * 0.44f, fill);
+    }
+
+    private void drawFps(Canvas c) {
+        float h = getHeight(), x = 0.085f * getWidth(), y = 0.183f * h, pw = 0.17f * h, ph = 0.058f * h;
+        rect.set(x, y, x + pw, y + ph);
+        fill.setColor(0xCC2A2E36); c.drawRoundRect(rect, ph * 0.2f, ph * 0.2f, fill);
+        text.setTextSize(ph * 0.52f);
+        c.drawText(fps + " FPS", x + pw / 2f, y + ph / 2f - (text.descent() + text.ascent()) / 2f, text);
     }
 }

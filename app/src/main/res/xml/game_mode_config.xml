@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Android 13+ game modes (game dashboard). The game handles them itself (NativeGameActivity: battery mode = 30 FPS), so the system does
+     not downscale the window or override the frame rate on its own: the engine renders at a fixed resolution chosen at start. -->
+<game-mode-config xmlns:android="http://schemas.android.com/apk/res/android"
+    android:supportsBatteryGameMode="true"
+    android:supportsPerformanceGameMode="true"
+    android:allowGameDownscaling="false"
+    android:allowGameFpsOverride="false" />

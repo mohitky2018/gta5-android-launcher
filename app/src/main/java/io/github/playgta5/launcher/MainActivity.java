@@ -67,6 +67,42 @@ public class MainActivity extends AppCompatActivity {
                 }
             });
 
+    // Story save import (Settings > Language and saves > Story saves > Import): any file the user picks, copied into the saves folder
+    private final ActivityResultLauncher<String[]> saveImportLauncher =
+            registerForActivityResult(new ActivityResultContracts.OpenDocument(), uri -> {
+                if (uri == null) return;
+                try {
+                    String name = "SGTA50000";
+                    android.database.Cursor c = getContentResolver().query(uri, null, null, null, null);
+                    if (c != null) {
+                        int col = c.getColumnIndex(android.provider.OpenableColumns.DISPLAY_NAME);
+                        if (col >= 0 && c.moveToFirst() && c.getString(col) != null) name = c.getString(col);
+                        c.close();
+                    }
+                    name = new java.io.File(name).getName();		// a bare file name: never a path out of the saves folder
+                    if (name.isEmpty() || name.startsWith(".")) name = "SGTA50000";
+                    java.io.File tmp = new java.io.File(getCacheDir(), "import_save.tmp");
+                    try (java.io.InputStream in = getContentResolver().openInputStream(uri); java.io.OutputStream out = new java.io.FileOutputStream(tmp)) {
+                        byte[] buf = new byte[65536]; int n;
+                        while (in != null && (n = in.read(buf)) > 0) out.write(buf, 0, n);
+                    }
+                    boolean ok = new io.github.playgta5.launcher.saves.StorySavesManager(this).importSaveFile(tmp, name);
+                    tmp.delete();
+                    Toast.makeText(this, ok ? "Save imported: " + name : "The save could not be imported", Toast.LENGTH_LONG).show();
+                } catch (Exception e) {
+                    Toast.makeText(this, "Import failed: " + e.getMessage(), Toast.LENGTH_LONG).show();
+                }
+            });
+
+    // Settings > Game files and save import: what only this screen can do
+    private final SettingsDialog.Host settingsHost = new SettingsDialog.Host() {
+        @Override public String gameFilesSummary() { return textFilesBadge != null ? String.valueOf(textFilesBadge.getText()) : "Unknown"; }
+        @Override public void chooseGameFolder() { if (checkAndRequestStoragePermissions(true)) openFolderPicker(); }
+        @Override public void enterGameFolderPath() { showManualPathDialog(); }
+        @Override public void verifyGameFiles() { runFileVerification(); }
+        @Override public void importStorySave() { saveImportLauncher.launch(new String[]{"*/*"}); }
+    };
+
     // Android 11+ All Files Access Permission Launcher
     private final ActivityResultLauncher<Intent> allFilesPermissionLauncher =
             registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
@@ -178,7 +214,7 @@ public class MainActivity extends AppCompatActivity {
         // Settings Dialog Button
         Button btnEditSettings = findViewById(R.id.btn_edit_settings);
         btnEditSettings.setOnClickListener(v -> {
-            new SettingsDialog(MainActivity.this, this::updateGraphicsSummary).show();
+            new SettingsDialog(MainActivity.this, this::updateGraphicsSummary).setHost(settingsHost).show();
         });
 
         // Cheats Dialog Button

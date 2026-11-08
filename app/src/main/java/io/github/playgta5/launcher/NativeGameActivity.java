@@ -1,17 +1,21 @@
 package io.github.playgta5.launcher;
 
+import android.app.GameManager;
+import android.content.Context;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.os.PowerManager;
 import android.os.Process;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.InputDevice;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
+import android.view.Surface;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
@@ -49,6 +53,7 @@ public class NativeGameActivity extends AppCompatActivity implements SurfaceHold
     private TextView status;
     private boolean started = false;
     private long lastBack = 0, startedAt = 0;
+    private int sessionFps = -1;		// the frame rate limit of this session (settings, or 30 in the system's battery game mode)
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,6 +65,12 @@ public class NativeGameActivity extends AppCompatActivity implements SurfaceHold
             getWindow().setAttributes(lp);
         }
         settings = new GameSettings(this);
+        if (settings.isSustainedPerformance() && Build.VERSION.SDK_INT >= 24) {
+            PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
+            boolean ok = pm != null && pm.isSustainedPerformanceModeSupported();
+            if (ok) getWindow().setSustainedPerformanceMode(true);
+            Log.i(TAG, "sustained performance mode: " + (ok ? "on" : "not supported on this phone"));
+        }
 
         FrameLayout root = new FrameLayout(this);
         root.setBackgroundColor(Color.BLACK);
@@ -106,7 +117,26 @@ public class NativeGameActivity extends AppCompatActivity implements SurfaceHold
     public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
         if (!NativeEngine.isAvailable()) return;
         NativeEngine.setSurface(holder.getSurface(), width, height);
-        if (!started && width > 0 && height > 0) startEngine(width, height);
+        if (!started && width > 0 && height > 0) startEngine(holder, width, height);
+        requestFrameRate(holder);
+    }
+
+    /** The frame rate limit of this session: the setting, or 30 when the system's game mode is Battery (Android 12+ game dashboard). */
+    private int sessionFps() {
+        if (sessionFps >= 0) return sessionFps;
+        int fps = settings.getFpsLimit();
+        if (Build.VERSION.SDK_INT >= 31) {
+            GameManager gm = (GameManager) getSystemService(Context.GAME_SERVICE);
+            if (gm != null && gm.getGameMode() == GameManager.GAME_MODE_BATTERY && (fps == 0 || fps > 30)) { fps = 30; Log.i(TAG, "battery game mode: 30 FPS"); }
+        }
+        return sessionFps = fps;
+    }
+
+    /** Asks the display for the game's frame rate (Android 11+): 60 on a 120 Hz panel paces evenly and saves power; unlocked asks nothing. */
+    private void requestFrameRate(SurfaceHolder holder) {
+        int fps = sessionFps();
+        if (Build.VERSION.SDK_INT < 30 || fps <= 0 || !holder.getSurface().isValid()) return;
+        try { holder.getSurface().setFrameRate(fps, Surface.FRAME_RATE_COMPATIBILITY_DEFAULT); } catch (Throwable t) { Log.w(TAG, "setFrameRate: " + t); }
     }
 
     @Override
@@ -114,7 +144,7 @@ public class NativeGameActivity extends AppCompatActivity implements SurfaceHold
         if (NativeEngine.isAvailable()) NativeEngine.setSurface(null, 0, 0);
     }
 
-    private void startEngine(int surfaceW, int surfaceH) {
+    private void startEngine(SurfaceHolder holder, int surfaceW, int surfaceH) {
         started = true;
         startedAt = System.currentTimeMillis();
         File base = null;
@@ -139,8 +169,13 @@ public class NativeGameActivity extends AppCompatActivity implements SurfaceHold
         int mode = GameSettings.MODE_STORY.equals(settings.getGameMode()) ? 1 : GameSettings.MODE_ENV_TEST.equals(settings.getGameMode()) ? 3 : 2;
         File user = new File(getFilesDir(), "engine");
         Log.i(TAG, "engine " + w + "x" + h + " (surface " + surfaceW + "x" + surfaceH + "), cores " + cores + ", args " + args);
+        try { NativeEngine.setPerformance(settings.isFastCores(), sessionFps()); NativeEngine.setLanguage(settings.getLanguageTag()); }
+        catch (UnsatisfiedLinkError e) { Log.w(TAG, "engine library without setPerformance/setLanguage (older build): " + e); }
         int rc = NativeEngine.start(data.getAbsolutePath(), user.getAbsolutePath(), shaders.getAbsolutePath(), args.toArray(new String[0]), cores, mode, w, h);
         if (rc != 0) { fail("The engine did not start (" + rc + ")"); return; }
+        // the window buffers at the render resolution: the display hardware scales them to the screen, so the GPU neither runs a full-screen
+        // scaling pass nor writes full-resolution buffers every frame (the next surfaceChanged hands the engine the smaller surface)
+        if (settings.isDisplayScaling() && (w != surfaceW || h != surfaceH)) { holder.setFixedSize(w, h); Log.i(TAG, "display scaling: window buffers " + w + "x" + h); }
         handler.postDelayed(this::watch, 500);
     }
 
@@ -157,7 +192,7 @@ public class NativeGameActivity extends AppCompatActivity implements SurfaceHold
         List<String> a = new ArrayList<>();
         for (String s : new String[]{"-rootdir=/game/", "-wgpu", "-nodisplaycalibration", "-noSocialClub", "-pc:nosocialclub", "-nonetwork", "-output",
                 "-width=" + w, "-height=" + h, "-forceResolution", "-Script_all=warning", "-replay_all=warning", "-fastscriptcore"}) a.add(s);
-        int fps = settings.getFpsLimit();
+        int fps = sessionFps();
         a.add("-frameLimit=" + (fps == 30 ? 2 : fps == 0 ? 0 : 1));
         if (settings.getCores() == 2) a.add("-numCores=2");
         // Texture quality 0 is the port's browser memory saver (the top mip of every texture skipped on the GPU: blurry); the native engine

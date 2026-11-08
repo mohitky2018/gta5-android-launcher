@@ -85,6 +85,15 @@ public class GameSettings {
     public String getGameDirectoryPath() { return prefs.getString("game_dir_path", ""); }
     public void setGameDirectoryPath(String path) { prefs.edit().putString("game_dir_path", path).apply(); }
 
+    // ---- language ---------------------------------------------------------------------------------------------------------------------------
+    // The game text languages in x64/data/lang, as the browser language tags the engine maps to them (navigator.language in the web build)
+    public static final String[] LANGUAGE_TAGS = {"en-US", "fr-FR", "de-DE", "it-IT", "es-ES", "es-MX", "pt-BR", "pl-PL", "ru-RU", "ko-KR", "ja-JP", "zh-TW"};
+    public static final String[] LANGUAGE_NAMES = {"English", "Français", "Deutsch", "Italiano", "Español", "Español (México)", "Português (Brasil)",
+            "Polski", "Русский", "한국어", "日本語", "中文 (繁體)"};
+    public int getLanguageIndex() { return clamp(prefs.getInt("language", 0), LANGUAGE_TAGS.length); }
+    public void setLanguageIndex(int i) { prefs.edit().putInt("language", i).apply(); }
+    public String getLanguageTag() { return LANGUAGE_TAGS[getLanguageIndex()]; }
+
     // ---- graphics ---------------------------------------------------------------------------------------------------------------------------
     public String getGraphicsPreset() { return prefs.getString("graphics_preset", PRESET_PERFORMANCE); }
 
@@ -144,6 +153,15 @@ public class GameSettings {
     public void setCoolDown(boolean on) { prefs.edit().putBoolean("cool_down", on).apply(); }
     public int getRunIn() { return prefs.getInt("run_in", RUN_AUTO); }
     public void setRunIn(int r) { prefs.edit().putInt("run_in", r).apply(); }
+    /** Native engine: the threads of the frame's critical path stay off the phone's slowest CPU cores (android_perf.c). */
+    public boolean isFastCores() { return prefs.getBoolean("fast_cores", true); }
+    public void setFastCores(boolean on) { prefs.edit().putBoolean("fast_cores", on).apply(); }
+    /** Native engine: the display hardware scales the picture up from the render resolution (no full-screen GPU pass, less memory traffic). */
+    public boolean isDisplayScaling() { return prefs.getBoolean("display_scaling", true); }
+    public void setDisplayScaling(boolean on) { prefs.edit().putBoolean("display_scaling", on).apply(); }
+    /** Window.setSustainedPerformanceMode: steady clocks the phone can hold for a long session, instead of peak clocks that throttle. */
+    public boolean isSustainedPerformance() { return prefs.getBoolean("sustained_perf", false); }
+    public void setSustainedPerformance(boolean on) { prefs.edit().putBoolean("sustained_perf", on).apply(); }
     public boolean isDiagnosticLog() { return prefs.getBoolean("diag_log", false); }
     public void setDiagnosticLog(boolean on) { prefs.edit().putBoolean("diag_log", on).apply(); }
 

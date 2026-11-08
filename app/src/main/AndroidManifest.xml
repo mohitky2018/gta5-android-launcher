@@ -35,7 +35,12 @@
         android:usesCleartextTraffic="true"
         android:largeHeap="true"
         android:hardwareAccelerated="true"
-        android:forceDarkAllowed="false">
+        android:forceDarkAllowed="false"
+        android:appCategory="game"
+        android:isGame="true">
+
+        <!-- game modes (Android 13+): res/xml/game_mode_config.xml -->
+        <meta-data android:name="android.game_mode_config" android:resource="@xml/game_mode_config" />
 
         <activity
             android:name=".MainActivity"

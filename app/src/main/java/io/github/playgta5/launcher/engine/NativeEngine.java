@@ -39,6 +39,10 @@ public final class NativeEngine {
     public static native void setFocus(boolean focus);
     /** Engine thread groups not skipped (1 replay, 2 net, 4 bink); call before start. Default 1: see android_main.cpp moduleInt. */
     public static native void setKeepThreads(int mask);
+    /** Before start: keep the frame's critical threads off the slowest CPU cluster; the frame rate target of the performance hints (0 = unlocked). */
+    public static native void setPerformance(boolean pinThreads, int targetFps);
+    /** Before start: the game's language as a browser language tag (GameSettings.LANGUAGE_TAGS). */
+    public static native void setLanguage(String tag);
     public static native long framesPresented();
     public static native String crashReason();
     /** The player's situation for the touch controls: bits 0-3 context (1 on foot, 2 car, 3 motorbike, 4 bicycle, 5 boat, 6 sub, 7 heli,
