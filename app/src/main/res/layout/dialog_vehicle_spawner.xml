@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/surface_dark"
+    android:orientation="vertical"
+    android:padding="20dp">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="VEHICLE SPAWNER"
+        android:textColor="@color/gta_gold"
+        android:textSize="20sp"
+        android:textStyle="bold" />
+
+    <EditText
+        android:id="@+id/edit_search_vehicle"
+        android:layout_width="match_parent"
+        android:layout_height="44dp"
+        android:layout_marginTop="12dp"
+        android:background="@drawable/bg_pill"
+        android:hint="Search vehicle (e.g. adder, bati, buzzard)..."
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp"
+        android:textColor="@color/text_primary"
+        android:textColorHint="@color/text_muted"
+        android:textSize="14sp" />
+
+    <Spinner
+        android:id="@+id/spinner_categories"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/bg_card" />
+
+    <ListView
+        android:id="@+id/list_vehicles"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="12dp"
+        android:layout_weight="1"
+        android:divider="@color/surface_card_stroke"
+        android:dividerHeight="1dp" />
+
+    <CheckBox
+        android:id="@+id/check_warp_inside"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:checked="true"
+        android:text="Spawn &amp; Warp Player Inside"
+        android:textColor="@color/text_primary" />
+
+</LinearLayout>
+

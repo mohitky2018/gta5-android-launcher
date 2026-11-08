@@ -1,0 +1,56 @@
+plugins {
+    id 'com.android.application'
+}
+
+android {
+    namespace 'io.github.playgta5.launcher'
+    compileSdk 34
+
+    defaultConfig {
+        applicationId "io.github.playgta5.launcher"
+        minSdk 26
+        targetSdk 34
+        versionCode 29
+        versionName "1.6.2"
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+
+    buildFeatures {
+        viewBinding false
+    }
+    // app/src/local (not in git): your own button artwork, the engine library and other files you may not redistribute. Build-type
+    // source sets override main, so anything there replaces the placeholder of the same name.
+    sourceSets {
+        debug { res.srcDirs += 'src/local/res'; assets.srcDirs += 'src/local/assets'; jniLibs.srcDirs += 'src/local/jniLibs' }
+        release { res.srcDirs += 'src/local/res'; assets.srcDirs += 'src/local/assets'; jniLibs.srcDirs += 'src/local/jniLibs' }
+    }
+}
+
+dependencies {
+    constraints {
+        implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.8.10") {
+            because("kotlin-stdlib-jdk7 is now part of kotlin-stdlib")
+        }
+        implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.8.10") {
+            because("kotlin-stdlib-jdk8 is now part of kotlin-stdlib")
+        }
+    }
+
+    implementation 'androidx.appcompat:appcompat:1.6.1'
+    implementation 'androidx.webkit:webkit:1.18.0'
+    implementation 'androidx.lifecycle:lifecycle-process:2.6.1'
+    implementation 'androidx.coordinatorlayout:coordinatorlayout:1.2.0'
+}

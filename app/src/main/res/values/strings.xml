@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">GTA V Port</string>
+    <string name="app_subtitle">Native Engine Android Launcher</string>
+    <string name="play_gta5">PLAY GTA V</string>
+    <string name="resume_game">RESUME GAME</string>
+    
+    <!-- Modes -->
+    <string name="mode_story">Story Mode</string>
+    <string name="mode_sandbox">Sandbox Mode</string>
+    <string name="mode_env_test">GTA VI Map (env_test)</string>
+
+    <!-- Cards -->
+    <string name="card_files_title">Game Files &amp; Storage</string>
+    <string name="card_graphics_title">Graphics &amp; Performance</string>
+    <string name="card_controls_title">Controls &amp; Overlay</string>
+    <string name="card_cheats_title">Cheats &amp; Trainer</string>
+    <string name="card_mods_title">Mods &amp; Patches</string>
+    <string name="card_radio_title">Self Radio</string>
+
+    <!-- Files -->
+    <string name="files_verified">Files Verified (Ready to play)</string>
+    <string name="files_not_found">Game files not found. Choose folder or extract game archive.</string>
+    <string name="btn_select_folder">Select Game Folder</string>
+    <string name="btn_verify_files">Verify Manifest</string>
+    <string name="btn_extract_archive">Extract Archive</string>
+
+    <!-- Presets -->
+    <string name="preset_ultra_perf">Ultra Performance (Max FPS)</string>
+    <string name="preset_balanced">Balanced (Recommended)</string>
+    <string name="preset_high">High Quality</string>
+
+    <!-- Settings Dialog -->
+    <string name="dialog_settings_title">Graphics &amp; Display Settings</string>
+    <string name="setting_resolution">Render Resolution</string>
+    <string name="setting_fps_cap">Target Frame Rate</string>
+    <string name="setting_low_memory">Low Memory Mode (Save RAM)</string>
+    <string name="setting_antialiasing">Anti-Aliasing</string>
+
+    <!-- Cheats Dialog -->
+    <string name="dialog_cheats_title">GTA V Trainer &amp; Cheats</string>
+    <string name="cheat_god_mode">God Mode (Invincibility)</string>
+    <string name="cheat_never_wanted">Never Wanted</string>
+    <string name="cheat_clear_wanted">Clear Wanted Level</string>
+    <string name="cheat_max_health_armor">Max Health &amp; Armor</string>
+    <string name="cheat_give_weapons">All Weapons &amp; Ammo</string>
+    <string name="cheat_fix_vehicle">Fix &amp; Clean Current Vehicle</string>
+    <string name="cheat_weather_clear">Clear Weather</string>
+    <string name="cheat_weather_sunny">Extra Sunny</string>
+    <string name="cheat_weather_thunder">Thunderstorm</string>
+    <string name="cheat_set_morning">Morning (08:00)</string>
+    <string name="cheat_set_noon">Noon (12:00)</string>
+    <string name="cheat_set_night">Midnight (00:00)</string>
+    <string name="cheat_add_money_100k">+$100,000 Cash</string>
+    <string name="cheat_add_money_1m">+$1,000,000 Cash</string>
+    <string name="cheat_spawn_vehicle">Open Vehicle Spawner</string>
+
+    <!-- Controls Overlay -->
+    <string name="controls_touch_toggle">Enable Touch Overlay</string>
+    <string name="controls_gyro_toggle">Gyro Steering &amp; Aiming</string>
+    <string name="controls_haptics_toggle">Haptic Vibration</string>
+    <string name="controls_edit_layout">Edit Touch Layout</string>
+    <string name="controls_reset_layout">Reset Layout</string>
+
+    <!-- Gamepad -->
+    <string name="gamepad_connected">Gamepad Connected: %1$s</string>
+    <string name="gamepad_not_connected">No Gamepad Connected (Touch active)</string>
+
+    <string name="btn_close">Close</string>
+    <string name="btn_save">Save</string>
+    <string name="btn_cancel">Cancel</string>
+</resources>
+

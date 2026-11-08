@@ -1,0 +1,15 @@
+# build output
+.gradle/
+build/
+app/build/
+local.properties
+*.apk
+*.aab
+.DS_Store
+.idea/
+*.iml
+captures/
+
+# not redistributable: your own engine build, game data and third-party artwork (see README "Local files")
+app/src/local/
+app/src/main/jniLibs/arm64-v8a/libgta5engine.so

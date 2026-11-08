@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/surface_dark">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="20dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="GRAPHICS &amp; PERFORMANCE"
+            android:textColor="@color/gta_gold"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="12dp"
+            android:layout_marginBottom="12dp"
+            android:background="@color/surface_card_stroke" />
+
+        <!-- Preset Chips -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="GRAPHICS PRESET"
+            android:textColor="@color/text_secondary"
+            android:textSize="12sp"
+            android:textStyle="bold" />
+
+        <RadioGroup
+            android:id="@+id/group_presets"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp">
+
+            <RadioButton
+                android:id="@+id/radio_ultra_perf"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Ultra Performance (540p, Low Memory, Max FPS)"
+                android:textColor="@color/text_primary" />
+
+            <RadioButton
+                android:id="@+id/radio_balanced"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Balanced (720p, Recommended for Android)"
+                android:textColor="@color/text_primary" />
+
+            <RadioButton
+                android:id="@+id/radio_high"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="High Quality (1080p, Full Detail)"
+                android:textColor="@color/text_primary" />
+        </RadioGroup>
+
+        <!-- FPS Limit -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="FPS LIMIT"
+            android:textColor="@color/text_secondary"
+            android:textSize="12sp"
+            android:textStyle="bold" />
+
+        <RadioGroup
+            android:id="@+id/group_fps"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:orientation="horizontal">
+
+            <RadioButton
+                android:id="@+id/radio_fps_30"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="30 FPS"
+                android:textColor="@color/text_primary" />
+
+            <RadioButton
+                android:id="@+id/radio_fps_60"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="60 FPS"
+                android:textColor="@color/text_primary" />
+
+            <RadioButton
+                android:id="@+id/radio_fps_unlocked"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Unlocked"
+                android:textColor="@color/text_primary" />
+        </RadioGroup>
+
+        <!-- Low Memory Mode -->
+        <androidx.appcompat.widget.SwitchCompat
+            android:id="@+id/switch_low_memory"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="Low Memory Mode (bootset_low.json)"
+            android:textColor="@color/text_primary" />
+
+        <!-- Controls Toggles -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="CONTROLS"
+            android:textColor="@color/text_secondary"
+            android:textSize="12sp"
+            android:textStyle="bold" />
+
+        <androidx.appcompat.widget.SwitchCompat
+            android:id="@+id/switch_touch_overlay"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="On-Screen Touch Overlay"
+            android:textColor="@color/text_primary" />
+
+        <androidx.appcompat.widget.SwitchCompat
+            android:id="@+id/switch_gyro"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="Gyroscope Steering &amp; Aiming"
+            android:textColor="@color/text_primary" />
+
+        <androidx.appcompat.widget.SwitchCompat
+            android:id="@+id/switch_haptics"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="Haptic Vibration Feedback"
+            android:textColor="@color/text_primary" />
+
+        <Button
+            android:id="@+id/btn_save_settings"
+            style="@style/GTA5Button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text="APPLY SETTINGS" />
+
+    </LinearLayout>
+</ScrollView>
+

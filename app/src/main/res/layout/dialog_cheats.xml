@@ -1,0 +1,226 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/surface_dark">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="20dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="GTA V TRAINER &amp; CHEATS"
+            android:textColor="@color/gta_gold"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="12dp"
+            android:layout_marginBottom="12dp"
+            android:background="@color/surface_card_stroke" />
+
+        <!-- Toggles -->
+        <androidx.appcompat.widget.SwitchCompat
+            android:id="@+id/switch_god_mode"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="God Mode (Invincibility)"
+            android:textColor="@color/text_primary"
+            android:textSize="16sp" />
+
+        <androidx.appcompat.widget.SwitchCompat
+            android:id="@+id/switch_never_wanted"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="Never Wanted"
+            android:textColor="@color/text_primary"
+            android:textSize="16sp" />
+
+        <!-- Actions -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/btn_clear_wanted"
+                style="@style/GTA5ButtonSecondary"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Clear Wanted" />
+
+            <Button
+                android:id="@+id/btn_max_health"
+                style="@style/GTA5ButtonSecondary"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_weight="1"
+                android:text="Max Health" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/btn_give_weapons"
+                style="@style/GTA5ButtonSecondary"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="All Weapons" />
+
+            <Button
+                android:id="@+id/btn_repair_vehicle"
+                style="@style/GTA5ButtonSecondary"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_weight="1"
+                android:text="Fix Vehicle" />
+        </LinearLayout>
+
+        <!-- Weather -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="WEATHER"
+            android:textColor="@color/text_secondary"
+            android:textSize="12sp"
+            android:textStyle="bold" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/btn_weather_sunny"
+                style="@style/GTA5ButtonSecondary"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Sunny" />
+
+            <Button
+                android:id="@+id/btn_weather_clear"
+                style="@style/GTA5ButtonSecondary"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="6dp"
+                android:layout_weight="1"
+                android:text="Clear" />
+
+            <Button
+                android:id="@+id/btn_weather_thunder"
+                style="@style/GTA5ButtonSecondary"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="6dp"
+                android:layout_weight="1"
+                android:text="Thunder" />
+        </LinearLayout>
+
+        <!-- Time of Day -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="TIME OF DAY"
+            android:textColor="@color/text_secondary"
+            android:textSize="12sp"
+            android:textStyle="bold" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/btn_time_morning"
+                style="@style/GTA5ButtonSecondary"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="08:00" />
+
+            <Button
+                android:id="@+id/btn_time_noon"
+                style="@style/GTA5ButtonSecondary"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="6dp"
+                android:layout_weight="1"
+                android:text="12:00" />
+
+            <Button
+                android:id="@+id/btn_time_night"
+                style="@style/GTA5ButtonSecondary"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="6dp"
+                android:layout_weight="1"
+                android:text="00:00" />
+        </LinearLayout>
+
+        <!-- Money -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="ADD CASH"
+            android:textColor="@color/text_secondary"
+            android:textSize="12sp"
+            android:textStyle="bold" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/btn_money_100k"
+                style="@style/GTA5ButtonSecondary"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="+$100,000" />
+
+            <Button
+                android:id="@+id/btn_money_1m"
+                style="@style/GTA5ButtonSecondary"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_weight="1"
+                android:text="+$1,000,000" />
+        </LinearLayout>
+
+        <!-- Vehicle Spawner Button -->
+        <Button
+            android:id="@+id/btn_open_spawner"
+            style="@style/GTA5Button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text="OPEN VEHICLE SPAWNER" />
+
+    </LinearLayout>
+</ScrollView>
+

@@ -1,0 +1,437 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <!-- Top Bar Controls -->
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="top|end"
+        android:layout_margin="16dp"
+        android:orientation="horizontal">
+
+        <ImageButton
+            android:id="@+id/btn_mod_tray_toggle"
+            android:layout_width="44dp"
+            android:layout_height="44dp"
+            android:background="@drawable/bg_circle_button"
+            android:src="@drawable/icon_script_a"
+            android:contentDescription="Mods"
+            android:scaleType="centerInside"
+            android:padding="8dp" />
+
+        <ImageButton
+            android:id="@+id/btn_quick_cheats"
+            android:layout_width="44dp"
+            android:layout_height="44dp"
+            android:layout_marginStart="10dp"
+            android:background="@drawable/bg_circle_button"
+            android:src="@drawable/icon_special"
+            android:contentDescription="Cheats"
+            android:scaleType="centerInside"
+            android:padding="8dp" />
+
+        <ImageButton
+            android:id="@+id/btn_quick_settings"
+            android:layout_width="44dp"
+            android:layout_height="44dp"
+            android:layout_marginStart="10dp"
+            android:background="@drawable/bg_circle_button"
+            android:src="@drawable/icon_settings"
+            android:contentDescription="Settings"
+            android:scaleType="centerInside"
+            android:padding="8dp" />
+    </LinearLayout>
+
+    <!-- Top Left Phone and Radio -->
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="top|start"
+        android:layout_margin="16dp"
+        android:orientation="horizontal">
+
+        <ImageButton
+            android:id="@+id/btn_phone"
+            android:layout_width="44dp"
+            android:layout_height="44dp"
+            android:background="@drawable/bg_circle_button"
+            android:src="@drawable/icon_phone"
+            android:contentDescription="Phone"
+            android:scaleType="centerInside"
+            android:padding="8dp" />
+
+        <ImageButton
+            android:id="@+id/btn_radio"
+            android:layout_width="44dp"
+            android:layout_height="44dp"
+            android:layout_marginStart="10dp"
+            android:background="@drawable/bg_circle_button"
+            android:src="@drawable/icon_radio"
+            android:contentDescription="Radio"
+            android:scaleType="centerInside"
+            android:padding="8dp" />
+    </LinearLayout>
+
+    <!-- Mod Keys Tray (Foldable) -->
+    <LinearLayout
+        android:id="@+id/container_mod_tray"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="top|center_horizontal"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/bg_pill"
+        android:orientation="horizontal"
+        android:visibility="gone">
+
+        <ImageButton
+            android:id="@+id/btn_script_f4"
+            android:layout_width="38dp"
+            android:layout_height="38dp"
+            android:background="@drawable/bg_circle_button"
+            android:src="@drawable/icon_script_lt"
+            android:contentDescription="F4"
+            android:scaleType="centerInside"
+            android:padding="6dp" />
+
+        <ImageButton
+            android:id="@+id/btn_script_up"
+            android:layout_width="38dp"
+            android:layout_height="38dp"
+            android:layout_marginStart="8dp"
+            android:background="@drawable/bg_circle_button"
+            android:src="@drawable/icon_up"
+            android:contentDescription="Up"
+            android:scaleType="centerInside"
+            android:padding="6dp" />
+
+        <ImageButton
+            android:id="@+id/btn_script_enter"
+            android:layout_width="38dp"
+            android:layout_height="38dp"
+            android:layout_marginStart="8dp"
+            android:background="@drawable/bg_circle_button"
+            android:src="@drawable/icon_script_a"
+            android:contentDescription="Select"
+            android:scaleType="centerInside"
+            android:padding="6dp" />
+
+        <ImageButton
+            android:id="@+id/btn_script_down"
+            android:layout_width="38dp"
+            android:layout_height="38dp"
+            android:layout_marginStart="8dp"
+            android:background="@drawable/bg_circle_button"
+            android:src="@drawable/icon_down"
+            android:contentDescription="Down"
+            android:scaleType="centerInside"
+            android:padding="6dp" />
+
+        <ImageButton
+            android:id="@+id/btn_script_back"
+            android:layout_width="38dp"
+            android:layout_height="38dp"
+            android:layout_marginStart="8dp"
+            android:background="@drawable/bg_circle_button"
+            android:src="@drawable/icon_back"
+            android:contentDescription="Back"
+            android:scaleType="centerInside"
+            android:padding="6dp" />
+    </LinearLayout>
+
+    <!-- Left Joystick (Movement) -->
+    <io.github.playgta5.launcher.controls.JoystickView
+        android:id="@+id/left_joystick"
+        android:layout_width="160dp"
+        android:layout_height="160dp"
+        android:layout_gravity="bottom|start"
+        android:layout_marginStart="24dp"
+        android:layout_marginBottom="24dp" />
+
+    <!-- Right Joystick (Look / Aim) -->
+    <io.github.playgta5.launcher.controls.JoystickView
+        android:id="@+id/right_joystick"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:layout_gravity="bottom|center_horizontal"
+        android:layout_marginBottom="24dp" />
+
+    <!-- ON FOOT BUTTONS CONTAINER (Right Side) -->
+    <RelativeLayout
+        android:id="@+id/container_on_foot"
+        android:layout_width="260dp"
+        android:layout_height="260dp"
+        android:layout_gravity="bottom|end"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp">
+
+        <!-- Weapon Wheel (Top) -->
+        <ImageButton
+            android:id="@+id/btn_weapons"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:background="@drawable/bg_circle_button"
+            android:src="@drawable/icon_weapons"
+            android:contentDescription="Weapon Wheel"
+            android:scaleType="centerInside"
+            android:padding="8dp" />
+
+        <!-- Aim Button (Top Left) -->
+        <ImageButton
+            android:id="@+id/btn_aim"
+            android:layout_width="54dp"
+            android:layout_height="54dp"
+            android:layout_alignParentStart="true"
+            android:layout_marginTop="30dp"
+            android:background="@drawable/bg_circle_button"
+            android:src="@drawable/icon_aim"
+            android:contentDescription="Aim"
+            android:scaleType="centerInside"
+            android:padding="10dp" />
+
+        <!-- Fire Button (Center Right) -->
+        <ImageButton
+            android:id="@+id/btn_fire"
+            android:layout_width="66dp"
+            android:layout_height="66dp"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:background="@drawable/bg_circle_button"
+            android:src="@drawable/icon_fire"
+            android:contentDescription="Fire"
+            android:scaleType="centerInside"
+            android:padding="12dp" />
+
+        <!-- Sprint Button -->
+        <ImageButton
+            android:id="@+id/btn_sprint"
+            android:layout_width="54dp"
+            android:layout_height="54dp"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="10dp"
+            android:layout_marginBottom="10dp"
+            android:background="@drawable/bg_circle_button"
+            android:src="@drawable/icon_sprint"
+            android:contentDescription="Sprint"
+            android:scaleType="centerInside"
+            android:padding="10dp" />
+
+        <!-- Jump Button -->
+        <ImageButton
+            android:id="@+id/btn_jump"
+            android:layout_width="54dp"
+            android:layout_height="54dp"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="10dp"
+            android:background="@drawable/bg_circle_button"
+            android:src="@drawable/icon_jump"
+            android:contentDescription="Jump"
+            android:scaleType="centerInside"
+            android:padding="10dp" />
+
+        <!-- Enter / Exit Vehicle -->
+        <ImageButton
+            android:id="@+id/btn_enter_exit"
+            android:layout_width="54dp"
+            android:layout_height="54dp"
+            android:layout_centerInParent="true"
+            android:background="@drawable/bg_circle_button"
+            android:src="@drawable/icon_enter_exit"
+            android:contentDescription="Enter/Exit"
+            android:scaleType="centerInside"
+            android:padding="10dp" />
+
+        <!-- Crouch -->
+        <ImageButton
+            android:id="@+id/btn_crouch"
+            android:layout_width="46dp"
+            android:layout_height="46dp"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentStart="true"
+            android:layout_marginStart="10dp"
+            android:layout_marginBottom="10dp"
+            android:background="@drawable/bg_circle_button"
+            android:src="@drawable/icon_crouch"
+            android:contentDescription="Crouch"
+            android:scaleType="centerInside"
+            android:padding="8dp" />
+
+        <!-- Reload -->
+        <ImageButton
+            android:id="@+id/btn_reload"
+            android:layout_width="46dp"
+            android:layout_height="46dp"
+            android:layout_toStartOf="@id/btn_weapons"
+            android:layout_marginEnd="10dp"
+            android:background="@drawable/bg_circle_button"
+            android:src="@drawable/icon_reload"
+            android:contentDescription="Reload"
+            android:scaleType="centerInside"
+            android:padding="8dp" />
+
+        <!-- Cover -->
+        <ImageButton
+            android:id="@+id/btn_cover"
+            android:layout_width="46dp"
+            android:layout_height="46dp"
+            android:layout_toEndOf="@id/btn_weapons"
+            android:layout_marginStart="10dp"
+            android:background="@drawable/bg_circle_button"
+            android:src="@drawable/icon_cover"
+            android:contentDescription="Cover"
+            android:scaleType="centerInside"
+            android:padding="8dp" />
+
+        <!-- Special Ability -->
+        <ImageButton
+            android:id="@+id/btn_special"
+            android:layout_width="44dp"
+            android:layout_height="44dp"
+            android:layout_centerVertical="true"
+            android:layout_alignParentStart="true"
+            android:layout_marginStart="10dp"
+            android:background="@drawable/bg_circle_button"
+            android:src="@drawable/icon_special"
+            android:contentDescription="Special"
+            android:scaleType="centerInside"
+            android:padding="8dp" />
+    </RelativeLayout>
+
+    <!-- IN VEHICLE / DRIVING BUTTONS CONTAINER (Right Side) -->
+    <RelativeLayout
+        android:id="@+id/container_in_vehicle"
+        android:layout_width="260dp"
+        android:layout_height="260dp"
+        android:layout_gravity="bottom|end"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp"
+        android:visibility="gone">
+
+        <!-- Gas / Accelerate -->
+        <ImageButton
+            android:id="@+id/btn_gas"
+            android:layout_width="66dp"
+            android:layout_height="66dp"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:background="@drawable/bg_circle_button"
+            android:src="@drawable/icon_gas"
+            android:contentDescription="Accelerate"
+            android:scaleType="centerInside"
+            android:padding="12dp" />
+
+        <!-- Brake / Reverse -->
+        <ImageButton
+            android:id="@+id/btn_brake"
+            android:layout_width="58dp"
+            android:layout_height="58dp"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="10dp"
+            android:layout_marginBottom="10dp"
+            android:background="@drawable/bg_circle_button"
+            android:src="@drawable/icon_brake"
+            android:contentDescription="Brake"
+            android:scaleType="centerInside"
+            android:padding="10dp" />
+
+        <!-- Handbrake -->
+        <ImageButton
+            android:id="@+id/btn_handbrake"
+            android:layout_width="54dp"
+            android:layout_height="54dp"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="10dp"
+            android:background="@drawable/bg_circle_button"
+            android:src="@drawable/icon_handbrake"
+            android:contentDescription="Handbrake"
+            android:scaleType="centerInside"
+            android:padding="10dp" />
+
+        <!-- Steer Left -->
+        <ImageButton
+            android:id="@+id/btn_steer_left"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_alignParentStart="true"
+            android:layout_centerVertical="true"
+            android:background="@drawable/bg_circle_button"
+            android:src="@drawable/icon_steer_left"
+            android:contentDescription="Steer Left"
+            android:scaleType="centerInside"
+            android:padding="8dp" />
+
+        <!-- Steer Right -->
+        <ImageButton
+            android:id="@+id/btn_steer_right"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_toEndOf="@id/btn_steer_left"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="8dp"
+            android:background="@drawable/bg_circle_button"
+            android:src="@drawable/icon_steer_right"
+            android:contentDescription="Steer Right"
+            android:scaleType="centerInside"
+            android:padding="8dp" />
+
+        <!-- Horn -->
+        <ImageButton
+            android:id="@+id/btn_horn"
+            android:layout_width="46dp"
+            android:layout_height="46dp"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentStart="true"
+            android:background="@drawable/bg_circle_button"
+            android:src="@drawable/icon_horn"
+            android:contentDescription="Horn"
+            android:scaleType="centerInside"
+            android:padding="8dp" />
+
+        <!-- Lights -->
+        <ImageButton
+            android:id="@+id/btn_lights"
+            android:layout_width="46dp"
+            android:layout_height="46dp"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:background="@drawable/bg_circle_button"
+            android:src="@drawable/icon_lights"
+            android:contentDescription="Lights"
+            android:scaleType="centerInside"
+            android:padding="8dp" />
+
+        <!-- Camera View -->
+        <ImageButton
+            android:id="@+id/btn_camera"
+            android:layout_width="46dp"
+            android:layout_height="46dp"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true"
+            android:background="@drawable/bg_circle_button"
+            android:src="@drawable/icon_camera"
+            android:contentDescription="Camera View"
+            android:scaleType="centerInside"
+            android:padding="8dp" />
+
+        <!-- Vehicle Exit -->
+        <ImageButton
+            android:id="@+id/btn_vehicle_exit"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_centerInParent="true"
+            android:background="@drawable/bg_circle_button"
+            android:src="@drawable/icon_enter_exit"
+            android:contentDescription="Exit Vehicle"
+            android:scaleType="centerInside"
+            android:padding="8dp" />
+    </RelativeLayout>
+
+</FrameLayout>
+

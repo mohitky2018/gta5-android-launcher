@@ -1,0 +1,336 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/bg_dark">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="20dp">
+
+            <!-- Hero Section -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:paddingTop="20dp"
+                android:paddingBottom="24dp">
+
+                <TextView
+                    android:id="@+id/text_app_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="GRAND THEFT AUTO V"
+                    android:textColor="@color/gta_gold"
+                    android:textSize="32sp"
+                    android:textStyle="bold"
+                    android:letterSpacing="0.05" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:text="PORTABLE EDITION • ANDROID LAUNCHER"
+                    android:textColor="@color/text_secondary"
+                    android:textSize="13sp"
+                    android:letterSpacing="0.1" />
+
+                <!-- Mode Selector Radio Group -->
+                <RadioGroup
+                    android:id="@+id/group_game_mode"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:orientation="horizontal"
+                    android:gravity="center">
+
+                    <RadioButton
+                        android:id="@+id/radio_mode_sandbox"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Sandbox"
+                        android:textColor="@color/text_primary"
+                        android:checked="true" />
+
+                    <RadioButton
+                        android:id="@+id/radio_mode_story"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="16dp"
+                        android:text="Story Mode"
+                        android:textColor="@color/text_primary" />
+
+                    <RadioButton
+                        android:id="@+id/radio_mode_env_test"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="16dp"
+                        android:text="GTA VI (env_test)"
+                        android:textColor="@color/text_primary" />
+                </RadioGroup>
+
+                <!-- Big Launch Button -->
+                <Button
+                    android:id="@+id/btn_launch_game"
+                    style="@style/GTA5Button"
+                    android:layout_width="match_parent"
+                    android:layout_height="56dp"
+                    android:layout_marginTop="18dp"
+                    android:text="PLAY GTA V"
+                    android:textSize="18sp"
+                    android:letterSpacing="0.05" />
+            </LinearLayout>
+
+            <!-- Card 1: Game Files & Installation -->
+            <LinearLayout
+                style="@style/GTA5Card"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical">
+
+                    <ImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:src="@drawable/icon_interact"
+                        android:contentDescription="Files" />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="10dp"
+                        android:layout_weight="1"
+                        android:text="@string/card_files_title"
+                        android:textColor="@color/text_primary"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/text_files_badge"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/bg_pill"
+                        android:text="Checking..."
+                        android:textColor="@color/gta_gold"
+                        android:textSize="11sp" />
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/text_files_summary"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:text="Checking local game assets against manifest.json..."
+                    android:textColor="@color/text_secondary"
+                    android:textSize="13sp" />
+
+                <ProgressBar
+                    android:id="@+id/progress_files"
+                    style="?android:attr/progressBarStyleHorizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="8dp"
+                    android:layout_marginTop="10dp"
+                    android:indeterminateTint="@color/gta_gold"
+                    android:progressTint="@color/gta_gold"
+                    android:visibility="gone" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="14dp"
+                    android:orientation="horizontal">
+
+                    <Button
+                        android:id="@+id/btn_choose_folder"
+                        style="@style/GTA5ButtonSecondary"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1.2"
+                        android:text="Choose Folder" />
+
+                    <Button
+                        android:id="@+id/btn_manual_path"
+                        style="@style/GTA5ButtonSecondary"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="6dp"
+                        android:layout_weight="1"
+                        android:text="Enter Path" />
+
+                    <Button
+                        android:id="@+id/btn_verify_manifest"
+                        style="@style/GTA5ButtonSecondary"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="6dp"
+                        android:layout_weight="0.9"
+                        android:text="Verify" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <!-- Card 2: Graphics & Performance -->
+            <LinearLayout
+                style="@style/GTA5Card"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical">
+
+                    <ImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:src="@drawable/icon_settings"
+                        android:contentDescription="Settings" />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="10dp"
+                        android:layout_weight="1"
+                        android:text="@string/card_graphics_title"
+                        android:textColor="@color/text_primary"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
+
+                    <Button
+                        android:id="@+id/btn_edit_settings"
+                        style="@style/GTA5ButtonSecondary"
+                        android:layout_width="wrap_content"
+                        android:layout_height="36dp"
+                        android:text="Configure"
+                        android:textSize="12sp"
+                        android:paddingLeft="12dp"
+                        android:paddingRight="12dp" />
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/text_graphics_summary"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:text="Preset: Balanced (720p) • 60 FPS • Standard Memory"
+                    android:textColor="@color/text_secondary"
+                    android:textSize="13sp" />
+            </LinearLayout>
+
+            <!-- Card 3: Trainer & Cheats -->
+            <LinearLayout
+                style="@style/GTA5Card"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical">
+
+                    <ImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:src="@drawable/icon_special"
+                        android:contentDescription="Cheats" />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="10dp"
+                        android:layout_weight="1"
+                        android:text="@string/card_cheats_title"
+                        android:textColor="@color/text_primary"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
+
+                    <Button
+                        android:id="@+id/btn_main_cheats"
+                        style="@style/GTA5ButtonSecondary"
+                        android:layout_width="wrap_content"
+                        android:layout_height="36dp"
+                        android:text="Open Trainer"
+                        android:textSize="12sp"
+                        android:paddingLeft="12dp"
+                        android:paddingRight="12dp" />
+                </LinearLayout>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:text="God Mode, Never Wanted, 30+ Vehicles Spawner, Weather, Time, and Cash"
+                    android:textColor="@color/text_secondary"
+                    android:textSize="13sp" />
+            </LinearLayout>
+
+            <!-- Card 4: Gamepad & Controls -->
+            <LinearLayout
+                style="@style/GTA5Card"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical">
+
+                    <ImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:src="@drawable/icon_script_ltrt"
+                        android:contentDescription="Gamepad" />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="10dp"
+                        android:layout_weight="1"
+                        android:text="@string/card_controls_title"
+                        android:textColor="@color/text_primary"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/text_gamepad_status"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:text="Dual Analog Touch Overlay Enabled • Bluetooth Controller Supported"
+                    android:textColor="@color/text_secondary"
+                    android:textSize="13sp" />
+            </LinearLayout>
+
+            <!-- Footer -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="24dp"
+                android:gravity="center"
+                android:text="GTA V Native Port Launcher v1.6.2 (Build 29)\nPowered by WebGPU / WebAssembly &amp; RAGE Shaders"
+                android:textColor="@color/text_muted"
+                android:textSize="11sp" />
+
+        </LinearLayout>
+    </ScrollView>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
+

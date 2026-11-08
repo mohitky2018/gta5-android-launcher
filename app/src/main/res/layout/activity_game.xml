@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Shown while the game runs in Chrome: the game needs cross-origin isolation (SharedArrayBuffer), which Android WebView does not provide. -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/game_root"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/bg_dark"
+    android:gravity="center"
+    android:orientation="vertical"
+    android:padding="24dp">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="GRAND THEFT AUTO V"
+        android:textColor="@color/gta_gold"
+        android:textSize="28sp"
+        android:textStyle="bold" />
+
+    <ProgressBar
+        android:id="@+id/loading_spinner"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="20dp"
+        android:indeterminate="true"
+        android:indeterminateTint="@color/gta_gold" />
+
+    <TextView
+        android:id="@+id/loading_status"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:gravity="center"
+        android:maxWidth="520dp"
+        android:text="Starting the game server…"
+        android:textColor="@color/text_secondary"
+        android:textSize="14sp" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/btn_open_game"
+            style="@style/GTA5Button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:enabled="false"
+            android:text="Play" />
+
+        <Button
+            android:id="@+id/btn_stop_game"
+            style="@style/GTA5ButtonSecondary"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:text="Stop server" />
+    </LinearLayout>
+
+</LinearLayout>

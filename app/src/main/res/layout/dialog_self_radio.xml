@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/surface_dark"
+    android:orientation="vertical"
+    android:padding="20dp">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="SELF RADIO • USER MUSIC"
+        android:textColor="@color/gta_gold"
+        android:textSize="20sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/text_radio_folder_path"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:text="Folder: Android/data/io.github.playgta5.launcher/files/User Music"
+        android:textColor="@color/text_secondary"
+        android:textSize="12sp" />
+
+    <!-- Player Controls Card -->
+    <LinearLayout
+        style="@style/GTA5Card"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:orientation="vertical"
+        android:gravity="center">
+
+        <TextView
+            android:id="@+id/text_current_song"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="No Track Playing"
+            android:textColor="@color/text_primary"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
+
+            <ImageButton
+                android:id="@+id/btn_radio_prev"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:background="@drawable/bg_circle_button"
+                android:src="@drawable/icon_weapon_prev"
+                android:contentDescription="Previous"
+                android:padding="10dp" />
+
+            <ImageButton
+                android:id="@+id/btn_radio_play_pause"
+                android:layout_width="56dp"
+                android:layout_height="56dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:background="@drawable/bg_button_gold"
+                android:src="@drawable/icon_interact"
+                android:contentDescription="Play/Pause"
+                android:padding="12dp" />
+
+            <ImageButton
+                android:id="@+id/btn_radio_next"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:background="@drawable/bg_circle_button"
+                android:src="@drawable/icon_weapon_next"
+                android:contentDescription="Next"
+                android:padding="10dp" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:text="TRACKS"
+        android:textColor="@color/text_secondary"
+        android:textSize="12sp"
+        android:textStyle="bold" />
+
+    <ListView
+        android:id="@+id/list_radio_tracks"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="8dp"
+        android:layout_weight="1"
+        android:divider="@color/surface_card_stroke"
+        android:dividerHeight="1dp" />
+
+    <Button
+        android:id="@+id/btn_rescan_radio"
+        style="@style/GTA5ButtonSecondary"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:text="Rescan Tracks" />
+
+</LinearLayout>
+

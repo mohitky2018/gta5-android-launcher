@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" android:maxSdkVersion="32" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" android:maxSdkVersion="29" />
+    <uses-permission android:name="android.permission.MANAGE_EXTERNAL_STORAGE" />
+    <!-- GameServerService keeps the local server alive while the game runs in Chrome -->
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_SPECIAL_USE" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+
+    <!-- GameActivity opens the game in Chrome (the WebView lacks cross-origin isolation) -->
+    <queries>
+        <package android:name="com.android.chrome" />
+        <package android:name="com.chrome.beta" />
+        <package android:name="com.chrome.dev" />
+        <package android:name="com.chrome.canary" />
+    </queries>
+
+    <uses-feature android:name="android.hardware.touchscreen" android:required="false" />
+    <uses-feature android:name="android.hardware.gamepad" android:required="false" />
+    <uses-feature android:name="android.hardware.sensor.gyroscope" android:required="false" />
+
+    <application
+        android:allowBackup="true"
+        android:icon="@drawable/icon_settings"
+        android:label="@string/app_name"
+        android:roundIcon="@drawable/icon_settings"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.GTA5Launcher"
+        android:usesCleartextTraffic="true"
+        android:largeHeap="true"
+        android:hardwareAccelerated="true"
+        android:forceDarkAllowed="false">
+
+        <activity
+            android:name=".MainActivity"
+            android:exported="true"
+            android:screenOrientation="unspecified"
+            android:configChanges="orientation|screenSize|screenLayout|keyboardHidden"
+            android:forceDarkAllowed="false">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <activity
+            android:name=".GameActivity"
+            android:exported="false"
+            android:launchMode="singleTop"
+            android:screenOrientation="sensorLandscape"
+            android:configChanges="orientation|screenSize|screenLayout|keyboard|keyboardHidden|navigation"
+            android:theme="@style/Theme.GTA5Launcher.Fullscreen"
+            android:forceDarkAllowed="false" />
+
+        <!-- The native engine (libgta5engine.so): its own process, the engine starts once per process -->
+        <activity
+            android:name=".NativeGameActivity"
+            android:exported="false"
+            android:process=":engine"
+            android:screenOrientation="sensorLandscape"
+            android:configChanges="orientation|screenSize|screenLayout|keyboard|keyboardHidden|navigation|smallestScreenSize|density"
+            android:theme="@style/Theme.GTA5Launcher.Fullscreen"
+            android:windowSoftInputMode="adjustNothing"
+            android:hardwareAccelerated="true"
+            android:forceDarkAllowed="false" />
+
+        <service
+            android:name=".server.GameServerService"
+            android:exported="false"
+            android:foregroundServiceType="specialUse">
+            <property
+                android:name="android.app.PROPERTY_SPECIAL_USE_FGS_SUBTYPE"
+                android:value="Local HTTP server that streams game files to the game running in the browser" />
+        </service>
+
+    </application>
+
+</manifest>
+

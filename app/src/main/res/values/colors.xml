@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="bg_dark">#0D0E11</color>
+    <color name="surface_dark">#17191E</color>
+    <color name="surface_card">#20232A</color>
+    <color name="surface_card_stroke">#323642</color>
+    <color name="gta_gold">#FDB813</color>
+    <color name="gta_gold_dark">#C48D0A</color>
+    <color name="gta_gold_transparent">#33FDB813</color>
+    <color name="accent_green">#00E676</color>
+    <color name="accent_red">#FF5252</color>
+    <color name="accent_blue">#2979FF</color>
+    <color name="text_primary">#FFFFFF</color>
+    <color name="text_secondary">#9E9EA7</color>
+    <color name="text_muted">#636773</color>
+    <color name="overlay_bg">#88000000</color>
+    <color name="joystick_base">#4DFFFFFF</color>
+    <color name="joystick_hat">#D9FDB813</color>
+</resources>
+
